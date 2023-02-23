@@ -96,6 +96,38 @@ describe("GET /companies", function () {
     });
   });
 
+  test("search by name", async function () {
+    const resp = await request(app).get('/companies').query({name:"c3"});
+    expect(resp.body).toEqual({
+      companies:
+        [
+          {handle:"c3",
+          name:"C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+         }
+        ]
+    });
+  })
+
+  test("search by number", async function() {
+    const resp = await request(app).get('/companies').query({minEmployees:2});
+    expect(resp.body).toEqual({
+      companies:
+        [
+          {handle:"c3",
+          name:"C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+         }
+        ]
+    });
+
+
+  })
+
   test("fails: test next() handler", async function () {
     // there's no normal failure event which will cause this route to fail ---
     // thus making it hard to test that the error-handler works with it. This
