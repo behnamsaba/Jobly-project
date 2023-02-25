@@ -16,6 +16,9 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 1
+    },
+    "company_handle":{
+      "type": "string"
     }
   },
   "additionalProperties": false,
