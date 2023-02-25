@@ -122,5 +122,19 @@ router.delete("/:username", ensureLoggedIn, async function (req, res, next) {
   }
 });
 
+router.post("/:username/jobs/:id", ensureLoggedIn, async function (req, res, next) {
+  try {
+    if((res.locals.user.username === req.params.username) || (res.locals.user.isAdmin === true)){
+      const jobId = req.params.id;
+      await User.applyToJob(req.params.username, jobId);
+      return res.json({ applied: jobId });
+    }
+    throw new UnauthorizedError();
+    
+  } catch (err) {
+    return next(err);
+  }
+});
+
 
 module.exports = router;
