@@ -15,13 +15,23 @@ describe("SQL injection object", function () {
         expect(test).toEqual(result);
     });
 
-    test("Data not Valid", function() {
+    test("should throw an error if no data is passed", function() {
         let dataToUpdate = {};
         let jsToSql = [];
-        expect(sqlForPartialUpdate(dataToUpdate,jsToSql)).toThrow(BadRequestError("No data"),400);
-
-
-        
+        expect(() => sqlForPartialUpdate(dataToUpdate, jsToSql)).toThrowError(BadRequestError);
     })
+    test("returns setCols with correct column names when jsToSql is provided", function () {
+        const dataToUpdate = { firstName: "Aliya", age: 32 };
+        const jsToSql = { firstName: "first_name" };
+        const result = sqlForPartialUpdate(dataToUpdate, jsToSql);
+        expect(result.setCols).toContain(`"first_name"=$1`);
+      });
+      
+      test("returns setCols with correct column names when jsToSql is not provided", function () {
+        const dataToUpdate = { firstName: "Aliya", age: 32 };
+        const jsToSql = {};
+        const result = sqlForPartialUpdate(dataToUpdate, jsToSql);
+        expect(result.setCols).toContain(`"firstName"=$1`);
+      });
 
 });
